@@ -1,9 +1,42 @@
 const app = require('express')();
+const mqtt = require('mqtt')
 
-app.get('/',(req,res)=>{
-    console.log('get method : /');
-    res.send('Server is up & Running - Backend');
-});
+const host = 'broker.emqx.io'
+const port = '1883'
+const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
+
+const connectUrl = `mqtt://${host}:${port}`
+
+const client = mqtt.connect(connectUrl, {
+  clientId,
+  clean: true,
+  connectTimeout: 4000,
+  username: 'emqx',
+  password: 'public',
+  reconnectPeriod: 1000,
+})
+
+let topic = 'last location';
+
+client.on('connect', () => {
+  console.log('Connected')
+  client.subscribe([topic], () => {
+    console.log(`Location sended to server '${topic}'`)
+  })
+})
+
+client.on('message', (topic, payload) => {
+  console.log('Received Message:', topic, payload.toString())
+})
+
+client.on('connect', () => {
+    client.publish(topic, 'received', { qos: 0, retain: false }, (error) => {
+      if (error) {
+        console.error(error)
+      }
+    })
+  })
+      
 
 
 app.listen(3000,()=>{
