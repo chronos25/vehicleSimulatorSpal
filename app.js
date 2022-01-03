@@ -1,44 +1,26 @@
-const app = require('express')();
-const mqtt = require('mqtt')
+const app = require('express')(),
+ cors = require('cors'),
+ bodyParser = require('body-parser'),
+ { json } = require('body-parser'),
+ vechileRoutes = require('./routes/apiRoutes');
+ var http = require('http').createServer(app);
+ var io = require('socket.io')(http);
 
-const host = 'broker.emqx.io'
-const port = '1883'
-const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
+//middlewares
+app.use(bodyParser.json());
+app.use(cors()); 
+app.use('/api',vechileRoutes);
+app.vechiles={};
 
-const connectUrl = `mqtt://${host}:${port}`
-
-const client = mqtt.connect(connectUrl, {
-  clientId,
-  clean: true,
-  connectTimeout: 4000,
-  username: 'emqx',
-  password: 'public',
-  reconnectPeriod: 1000,
-})
-
-let topic = 'last location';
-
-client.on('connect', () => {
-  console.log('Connected')
-  client.subscribe([topic], () => {
-    console.log(`Location sended to server '${topic}'`)
-  })
-})
-
-client.on('message', (topic, payload) => {
-  console.log('Received Message:', topic, payload.toString())
-})
-
-client.on('connect', () => {
-    client.publish(topic, 'received', { qos: 0, retain: false }, (error) => {
-      if (error) {
-        console.error(error)
-      }
-    })
-  })
-      
+app.io = io;
+io.on('connection',(socket)=>{
+  console.log('User Connected');
+  socket.on('disconnect',()=>{
+    console.log('User Disconnected');
+  });
+});
 
 
-app.listen(3000,()=>{
+http.listen(3000,()=>{
     console.log('Server is running at Port Number 3000');
 });

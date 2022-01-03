@@ -9,7 +9,12 @@
   "author": "Ritik Raj",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.24.0",
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
     "express": "^4.17.2",
-    "mqtt": "^4.3.2"
+    "geolib": "^3.3.3",
+    "mqtt": "^4.3.2",
+    "socket.io": "^4.4.0"
   }
 }
