@@ -1,0 +1,16 @@
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+  .example-card {
+    max-width: 46%;
+    top: 37%;
+    left: 26%;
+    position: relative; 
+
+  }
+
+  .example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
