@@ -1,14 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-
-export interface PeriodicElement {
-  id:Number,
-  lat:Number,
-  long:Number,
-  ts:String
-}
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -21,16 +13,16 @@ export class DashboardComponent implements OnInit {
     id:Number,
     lat:Number,
     long:Number,
-    ts:String
+    speed:Number
   }];
   
   
-  displayedColumns: string[] = ['id', 'lat', 'long', 'ts'];
+  displayedColumns: string[] = ['id', 'lat', 'long', 'speed'];
   dataSource=[{
     id:Number,
     lat:Number,
     long:Number,
-    ts:String
+    speed:Number
   }];
 
   constructor(private http: HttpClient ) { }
@@ -51,13 +43,13 @@ export class DashboardComponent implements OnInit {
           id:Number,
           lat:Number,
           long:Number,
-          ts:String
+          speed:Number
         };  
         //console.log(res[i]);
         obj.id = res[i].id;
         obj.lat = res[i].lat;
         obj.long = res[i].long;
-        obj.ts = res[i].ts;
+        obj.speed = res[i].speed;
         this.data.push(obj);
         i++;
       }
